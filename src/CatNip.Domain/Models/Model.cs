@@ -2,14 +2,14 @@ using CatNip.Domain.Models.Interfaces;
 
 namespace CatNip.Domain.Models;
 
-public abstract class Model<TKey> : Model, IModel<TKey>
-    where TKey : IEquatable<TKey>
+public abstract class Model<TId> : Model, IModel<TId>
+    where TId : IEquatable<TId>
 {
-    public virtual TKey Id { get; set; } = default!;
+    public virtual TId Id { get; set; } = default!;
 
     public override bool Equals(Model? other)
     {
-        if (other is not Model<TKey> model)
+        if (other is not Model<TId> model)
         {
             return false;
         }
