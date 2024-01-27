@@ -1,8 +1,8 @@
 using CatNip.Domain.Models.Interfaces;
 using CatNip.Domain.Query.Filtering;
-using CatNip.Domain.Repository.Internal;
+using CatNip.Domain.Repositories.Internal;
 
-namespace CatNip.Domain.Repository;
+namespace CatNip.Domain.Repositories;
 
 public interface IAceRepository<TModel, TId, TFiltering>
     : IQueryRepository<TModel, TId, TFiltering>, ICrudRepository<TModel, TId>

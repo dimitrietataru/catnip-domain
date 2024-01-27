@@ -1,6 +1,6 @@
 using CatNip.Domain.Models.Interfaces;
 
-namespace CatNip.Domain.Repository.Internal;
+namespace CatNip.Domain.Repositories.Internal;
 
 public interface ICommandRepository<TModel, TId> : ICommandRepository<TModel>
     where TModel : IModel<TId>

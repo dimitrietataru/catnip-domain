@@ -1,4 +1,4 @@
-namespace CatNip.Domain.Repository;
+namespace CatNip.Domain.Repositories;
 
 public interface IRepository<TEntity>
     where TEntity : class

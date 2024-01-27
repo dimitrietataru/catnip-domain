@@ -2,7 +2,7 @@ using CatNip.Domain.Models.Interfaces;
 using CatNip.Domain.Query;
 using CatNip.Domain.Query.Filtering;
 
-namespace CatNip.Domain.Repository.Internal;
+namespace CatNip.Domain.Repositories.Internal;
 
 public interface IQueryRepository<TModel, TId, TFiltering> : IQueryRepository<TModel, TId>
     where TModel : IModel<TId>
