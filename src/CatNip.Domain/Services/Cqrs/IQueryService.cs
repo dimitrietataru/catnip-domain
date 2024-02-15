@@ -10,7 +10,7 @@ public interface IQueryService<TModel, TId, TFiltering> : IQueryService<TModel, 
     where TFiltering : IFilteringRequest
 {
     Task<QueryResponse<TModel>> GetAsync(QueryRequest<TFiltering> request, CancellationToken cancellation = default);
-    Task<int> CountAsync(QueryRequest<TFiltering> request, CancellationToken cancellation = default);
+    Task<int> CountAsync(TFiltering filter, CancellationToken cancellation = default);
 }
 
 public interface IQueryService<TModel, TId> : IQueryService<TModel>
