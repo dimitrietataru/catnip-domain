@@ -8,7 +8,7 @@
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>CatNip.Domain</PackageId>
-    <Version>0.2.0-alpha</Version>
+    <Version>0.9.0-beta</Version>
     <Authors>Dimitrie Tataru</Authors>
     <Company>A C E</Company>
     <Description>Clean Architecture Template - Domain Abstractions</Description>
