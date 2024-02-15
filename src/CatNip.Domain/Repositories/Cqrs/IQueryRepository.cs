@@ -2,18 +2,19 @@ using CatNip.Domain.Models.Interfaces;
 using CatNip.Domain.Query;
 using CatNip.Domain.Query.Filtering;
 
-namespace CatNip.Domain.Services.Internal;
+namespace CatNip.Domain.Repositories.Cqrs;
 
-public interface IQueryService<TModel, TId, TFiltering> : IQueryService<TModel, TId>
+public interface IQueryRepository<TModel, TId, TFiltering> : IQueryRepository<TModel, TId>
     where TModel : IModel<TId>
     where TId : IEquatable<TId>
     where TFiltering : IFilteringRequest
 {
     Task<QueryResponse<TModel>> GetAsync(QueryRequest<TFiltering> request, CancellationToken cancellation = default);
     Task<int> CountAsync(QueryRequest<TFiltering> request, CancellationToken cancellation = default);
+    Task<bool> ExistsAsync(TFiltering filter, CancellationToken cancellation = default);
 }
 
-public interface IQueryService<TModel, TId> : IQueryService<TModel>
+public interface IQueryRepository<TModel, TId> : IQueryRepository<TModel>
     where TModel : IModel<TId>
     where TId : IEquatable<TId>
 {
@@ -21,7 +22,7 @@ public interface IQueryService<TModel, TId> : IQueryService<TModel>
     Task<bool> ExistsAsync(TId id, CancellationToken cancellation = default);
 }
 
-public interface IQueryService<TModel>
+public interface IQueryRepository<TModel>
     where TModel : IModel
 {
     Task<IEnumerable<TModel>> GetAllAsync(CancellationToken cancellation = default);

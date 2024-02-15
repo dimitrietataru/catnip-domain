@@ -1,17 +1,19 @@
 using CatNip.Domain.Models.Interfaces;
 
-namespace CatNip.Domain.Repositories.Internal;
+namespace CatNip.Domain.Services.Cqrs;
 
-public interface ICommandRepository<TModel, TId> : ICommandRepository<TModel>
+public interface ICommandService<TModel, TId> : ICommandService<TModel>
     where TModel : IModel<TId>
     where TId : IEquatable<TId>
 {
+    Task UpdateAsync(TId id, TModel model, CancellationToken cancellation = default);
     Task DeleteAsync(TId id, CancellationToken cancellation = default);
 }
 
-public interface ICommandRepository<TModel>
+public interface ICommandService<TModel>
     where TModel : IModel
 {
     Task<TModel> CreateAsync(TModel model, CancellationToken cancellation = default);
     Task UpdateAsync(TModel model, CancellationToken cancellation = default);
+    Task DeleteAsync(TModel model, CancellationToken cancellation = default);
 }
