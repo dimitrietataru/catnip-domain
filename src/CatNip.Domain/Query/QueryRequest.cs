@@ -37,4 +37,14 @@ public abstract class QueryRequest : IPaginationRequest, ISortingRequest
 
     public virtual string? SortBy { get; init; }
     public virtual SortDirection? SortDirection { get; init; }
+
+    public bool HasPaginationData()
+    {
+        return Page.HasValue && Size.HasValue;
+    }
+
+    public bool HasSortingData()
+    {
+        return !string.IsNullOrWhiteSpace(SortBy) && SortDirection.HasValue;
+    }
 }

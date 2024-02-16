@@ -4,4 +4,6 @@ public interface IPaginationRequest
 {
     int? Page { get; }
     int? Size { get; }
+
+    bool HasPaginationData();
 }

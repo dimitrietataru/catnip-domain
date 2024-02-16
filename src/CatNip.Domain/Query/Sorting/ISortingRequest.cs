@@ -6,4 +6,6 @@ public interface ISortingRequest
 {
     string? SortBy { get; }
     SortDirection? SortDirection { get; }
+
+    bool HasSortingData();
 }
