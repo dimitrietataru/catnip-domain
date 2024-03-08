@@ -187,3 +187,9 @@ interface ICrudRepository<TModel, TId> : IQueryRepository<TModel, TId>, ICommand
 ```
 
 </details>
+
+### Related projects
+* [catnip-application](https://github.com/dimitrietataru/catnip-application)
+* [catnip-infrastructure](https://github.com/dimitrietataru/catnip-infrastructure)
+* [catnip-presentation](https://github.com/dimitrietataru/catnip-presentation)
+* [csharp-coding-standards](https://github.com/dimitrietataru/csharp-coding-standards)
