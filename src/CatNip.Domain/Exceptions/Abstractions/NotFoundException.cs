@@ -1,4 +1,4 @@
-namespace CatNip.Domain.Exceptions;
+namespace CatNip.Domain.Exceptions.Abstractions;
 
 public abstract class NotFoundException : Exception
 {
