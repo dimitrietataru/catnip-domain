@@ -12,5 +12,5 @@ public abstract class QueryFilter<TId, TIds> : IFilteringRequest
     where TIds : IEquatable<TIds>
 {
     public virtual TId Id { get; init; } = default!;
-    public virtual IEnumerable<TIds> Ids { get; init; } = Enumerable.Empty<TIds>();
+    public virtual IEnumerable<TIds> Ids { get; init; } = [];
 }
