@@ -10,6 +10,8 @@ public interface IQueryRepository<TModel, TId, TFiltering> : IQueryRepository<TM
     where TFiltering : IFilteringRequest
 {
     Task<QueryResponse<TModel>> GetAsync(QueryRequest<TFiltering> request, CancellationToken cancellation = default);
+    Task<QueryResponse<TModelRoot>> GetAsync<TModelRoot>(QueryRequest<TFiltering> request, CancellationToken cancellation = default)
+        where TModelRoot : IModel<TId>;
     Task<int> CountAsync(TFiltering filter, CancellationToken cancellation = default);
     Task<bool> ExistsAsync(TFiltering filter, CancellationToken cancellation = default);
 }
@@ -26,5 +28,7 @@ public interface IQueryRepository<TModel>
     where TModel : IModel
 {
     Task<IEnumerable<TModel>> GetAllAsync(CancellationToken cancellation = default);
+    Task<IEnumerable<TModelRoot>> GetAllAsync<TModelRoot>(CancellationToken cancellation = default)
+        where TModelRoot : IModel;
     Task<int> CountAsync(CancellationToken cancellation = default);
 }
