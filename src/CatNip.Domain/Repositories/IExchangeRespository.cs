@@ -3,8 +3,8 @@ using CatNip.Domain.ImportExport.Csv;
 
 namespace CatNip.Domain.Repositories;
 
-public interface IExchangeRespository
+public interface IExchangeRespository<TExchange>
+    where TExchange : ICsvMappable
 {
-    Task<ImportResponse> ImportAsync<T>(ICollection<T> records, CancellationToken cancellation)
-        where T : ICsvMappable;
+    Task<ImportResponse> ImportAsync(ICollection<TExchange> records, CancellationToken cancellation);
 }
