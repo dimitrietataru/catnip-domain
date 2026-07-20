@@ -8,7 +8,7 @@ public class ImportResponse
     public int CreatedRecords { get; init; }
     public int UpdatedRecords { get; init; }
 
-    public required virtual IEnumerable<ImportValidationError> Errors { get; init; } = [];
+    public required virtual IEnumerable<ImportError> Errors { get; init; } = [];
 
     public static ImportResponse Success(int totalRows, int createdRecords, int updatedRecords)
     {
@@ -22,16 +22,7 @@ public class ImportResponse
         };
     }
 
-    public static ImportResponse Failure(ImportValidationError error)
-    {
-        return new ImportResponse
-        {
-            IsSuccessful = false,
-            Errors = [error]
-        };
-    }
-
-    public static ImportResponse Failure(IEnumerable<ImportValidationError> errors)
+    public static ImportResponse Failure(params IEnumerable<ImportError> errors)
     {
         return new ImportResponse
         {
@@ -41,8 +32,78 @@ public class ImportResponse
     }
 }
 
-public sealed class ImportValidationError
+public abstract class ImportError
 {
-    public int RowNumber { get; set; } = -1;
-    public string ErrorMessage { get; set; } = default!;
+    protected ImportError()
+    {
+        RowNumber = -1;
+    }
+
+    [SetsRequiredMembers]
+    protected ImportError(string errorMessage)
+        : base()
+    {
+        ErrorMessage = errorMessage;
+    }
+
+    [SetsRequiredMembers]
+    protected ImportError(int rowNumber, string errorMessage)
+    {
+        RowNumber = rowNumber;
+        ErrorMessage = errorMessage;
+    }
+
+    public virtual int RowNumber { get; init; }
+    public virtual required string ErrorMessage { get; init; }
+}
+
+public sealed class ImportParseError : ImportError
+{
+    public ImportParseError()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public ImportParseError(string errorMessage)
+        : base(-1, errorMessage)
+    {
+    }
+}
+
+public sealed class ImportValidationError : ImportError
+{
+    public ImportValidationError()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public ImportValidationError(string errorMessage)
+        : base(errorMessage)
+    {
+    }
+
+    [SetsRequiredMembers]
+    public ImportValidationError(int rowNumber, string errorMessage)
+        : base(rowNumber, errorMessage)
+    {
+    }
+}
+
+public sealed class ImportDataIntegrityError : ImportError
+{
+    public ImportDataIntegrityError()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public ImportDataIntegrityError(string errorMessage)
+        : base(errorMessage)
+    {
+    }
+
+    [SetsRequiredMembers]
+    public ImportDataIntegrityError(int rowNumber, string errorMessage)
+        : base(rowNumber, errorMessage)
+    {
+    }
 }
