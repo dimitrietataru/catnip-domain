@@ -60,6 +60,7 @@ public abstract class ImportError
 public sealed class ImportParseError : ImportError
 {
     public ImportParseError()
+        : base()
     {
     }
 
@@ -73,6 +74,7 @@ public sealed class ImportParseError : ImportError
 public sealed class ImportValidationError : ImportError
 {
     public ImportValidationError()
+        : base()
     {
     }
 
@@ -92,6 +94,7 @@ public sealed class ImportValidationError : ImportError
 public sealed class ImportDataIntegrityError : ImportError
 {
     public ImportDataIntegrityError()
+        : base()
     {
     }
 
