@@ -2,5 +2,5 @@ namespace CatNip.Domain.ImportExport.Csv;
 
 public interface ICsvMappable
 {
-    int RowNumber { get; }
+    int RowNumber { get; set; }
 }
