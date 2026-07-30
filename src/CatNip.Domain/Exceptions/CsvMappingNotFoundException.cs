@@ -2,7 +2,7 @@ using CatNip.Domain.Exceptions.Abstractions;
 
 namespace CatNip.Domain.Exceptions;
 
-public class CsvMappingNotFoundException : NotFoundException
+public class CsvMappingNotFoundException : MappingNotFoundException
 {
     public CsvMappingNotFoundException()
         : base()
