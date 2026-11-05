@@ -15,6 +15,7 @@ jobs:
     env:
       CONFIG: 'Release'
       SOLUTION: 'src/CatNip.Domain.sln'
+      TEST_PROJECT: 'src/CatNip.Domain.Tests/CatNip.Domain.Tests.csproj'
 
     runs-on: ubuntu-latest
 
@@ -42,6 +43,9 @@ jobs:
 
     - name: dotnet build
       run: dotnet build $SOLUTION --configuration $CONFIG -p:Version=$BUILD_VERSION --no-restore
+
+    - name: dotnet test
+      run: dotnet test $TEST_PROJECT --configuration $CONFIG --no-restore --no-build --verbosity normal
 
     - name: dotnet nuget push
       if: startsWith(github.ref, 'refs/heads/release')

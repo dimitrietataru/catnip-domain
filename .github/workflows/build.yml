@@ -19,6 +19,7 @@ jobs:
     env:
       CONFIG: 'Release'
       SOLUTION: 'src/CatNip.Domain.sln'
+      TEST_PROJECT: 'src/CatNip.Domain.Tests/CatNip.Domain.Tests.csproj'
 
     runs-on: ubuntu-latest
 
@@ -38,3 +39,6 @@ jobs:
 
     - name: dotnet build
       run: dotnet build $SOLUTION --configuration $CONFIG --no-restore
+
+    - name: dotnet test
+      run: dotnet test $TEST_PROJECT --configuration $CONFIG --no-restore --no-build --verbosity normal
