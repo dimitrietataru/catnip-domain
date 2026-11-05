@@ -9,12 +9,17 @@ public abstract class Model<TId> : Model, IModel<TId>
 
     public override bool Equals(Model? other)
     {
-        if (other is not Model<TId> model)
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        if (other is not Model<TId> model || other.GetType() != GetType())
         {
             return false;
         }
 
-        if (Id.Equals(default) || model.Id.Equals(default))
+        if (EqualityComparer<TId>.Default.Equals(Id, default) || EqualityComparer<TId>.Default.Equals(model.Id, default))
         {
             return false;
         }
