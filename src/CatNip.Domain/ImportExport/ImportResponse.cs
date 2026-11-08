@@ -41,7 +41,7 @@ public abstract class ImportError
 
     [SetsRequiredMembers]
     protected ImportError(string errorMessage)
-        : base()
+        : this()
     {
         ErrorMessage = errorMessage;
     }
