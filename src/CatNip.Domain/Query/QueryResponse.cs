@@ -24,9 +24,8 @@ public sealed class QueryResponse<TModel> : QueryResponse, IPaginationResponse<T
     public IEnumerable<TModel> Items { get; init; } = new List<TModel>();
 }
 
-public class QueryResponse : IPaginationResponse, ISortingResponse
+public abstract class QueryResponse : IPaginationResponse, ISortingResponse
 {
     public virtual int? Page { get; init; }
-
     public virtual int? Size { get; init; }
 }

@@ -66,7 +66,7 @@ public sealed class ImportParseError : ImportError
 
     [SetsRequiredMembers]
     public ImportParseError(string errorMessage)
-        : base(-1, errorMessage)
+        : base(errorMessage)
     {
     }
 }

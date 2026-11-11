@@ -1,15 +1,11 @@
 using CatNip.Domain.Models.Interfaces;
-using CatNip.Domain.Services.Cqrs;
+using CatNip.Domain.Services.Command;
+using CatNip.Domain.Services.Query;
 
 namespace CatNip.Domain.Services;
 
-public interface ICrudService<TModel, TId> : IQueryService<TModel, TId>, ICommandService<TModel, TId>
-    where TModel : IModel<TId>
+public interface ICrudService<TModel, TId> : IService<TModel>, IQueryCrudService<TModel, TId>, ICommandCrudService<TModel, TId>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
-{
-}
-
-public interface ICrudService<TModel> : IQueryService<TModel>, ICommandService<TModel>
-    where TModel : IModel
 {
 }

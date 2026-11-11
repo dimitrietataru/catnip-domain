@@ -1,6 +1,6 @@
 using CatNip.Domain.Models.Interfaces;
 
-namespace CatNip.Domain.Repositories;
+namespace CatNip.Domain.Repositories.UnitOfWork;
 
 public interface IUnitOfWork<TModel> : IUnitOfWork
     where TModel : IModel

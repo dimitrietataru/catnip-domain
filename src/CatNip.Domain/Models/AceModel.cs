@@ -2,13 +2,13 @@ using CatNip.Domain.Models.Interfaces;
 
 namespace CatNip.Domain.Models;
 
-public abstract class TraceableModel<TId> : TraceableModel<TId, TId>
+public abstract class AceModel<TId> : AceModel<TId, TId>, IAceModel<TId>
     where TId : IEquatable<TId>
 {
 }
 
-public abstract class TraceableModel<TModelId, TTraceId> : Model<TModelId>, ITraceableModel<TModelId, TTraceId>
-    where TModelId : IEquatable<TModelId>
+public abstract class AceModel<TId, TTraceId> : CrudModel<TId>, IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
     where TTraceId : IEquatable<TTraceId>
 {
     public virtual DateTimeOffset? CreatedAt { get; set; }

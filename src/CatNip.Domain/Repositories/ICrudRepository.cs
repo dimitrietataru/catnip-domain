@@ -1,17 +1,11 @@
 using CatNip.Domain.Models.Interfaces;
-using CatNip.Domain.Repositories.Cqrs;
+using CatNip.Domain.Repositories.Command;
+using CatNip.Domain.Repositories.Query;
 
 namespace CatNip.Domain.Repositories;
 
-public interface ICrudRepository<TModel, TId> : IQueryRepository<TModel, TId>, ICommandRepository<TModel, TId>
-    where TModel : IModel<TId>
+public interface ICrudRepository<TModel, TId> : IRepository<TModel>, IQueryCrudRepository<TModel, TId>, ICommandCrudRepository<TModel, TId>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
-    IUnitOfWork<TModel> UnitOfWork { get; }
-}
-
-public interface ICrudRepository<TModel> : IQueryRepository<TModel>, ICommandRepository<TModel>
-    where TModel : IModel
-{
-    IUnitOfWork<TModel> UnitOfWork { get; }
 }

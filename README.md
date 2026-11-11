@@ -56,12 +56,12 @@ interface IQueryService<TModel>
 interface ICommandService<TModel>
     where TModel : IModel
 {
-    Task CreateAsync(TModel model, CancellationToken cancellation);
+    Task<TModel> CreateAsync(TModel model, CancellationToken cancellation);
     Task UpdateAsync(TModel model, CancellationToken cancellation);
     Task DeleteAsync(TModel model, CancellationToken cancellation);
 }
 
-interface ICrudService<TModel> : IQueryService<TModel>, ICommandService<TModel>
+interface IService<TModel> : IQueryService<TModel>, ICommandService<TModel>
     where TModel : IModel
 {
 }
@@ -79,12 +79,12 @@ interface IQueryRepository<TModel>
 interface ICommandRepository<TModel>
     where TModel : IModel
 {
-    Task CreateAsync(TModel model, CancellationToken cancellation);
+    Task<TModel> CreateAsync(TModel model, CancellationToken cancellation);
     Task UpdateAsync(TModel model, CancellationToken cancellation);
     Task DeleteAsync(TModel model, CancellationToken cancellation);
 }
 
-interface ICrudRepository<TModel> : IQueryRepository<TModel>, ICommandRepository<TModel>
+interface IRepository<TModel> : IQueryRepository<TModel>, ICommandRepository<TModel>
     where TModel : IModel
 {
 }
@@ -92,12 +92,12 @@ interface ICrudRepository<TModel> : IQueryRepository<TModel>, ICommandRepository
 
 </details>
 
-## IModel\<TId\>
+## ICrudModel
 
-Introducing the **IModel\<TId\>** type
+Introducing the **ICrudModel\<TId\>** type
 
 ``` csharp
-interface IModel<TId> : IModel
+interface ICrudModel<TId> : IModel
     where TId : IEquatable<TId>
 {
     TId Id { get; }
@@ -109,22 +109,21 @@ At *Service* and *Repository* layer, the previous actions are extended and the f
     * GetById(TId)
     * Exists(TId)
   * Commands
-    * Create(TModel)
     * Update(TId, TModel)
     * Delete(TId)
 
 <details>
-  <summary>IModel< TId > abstractions</summary>
+  <summary>ICrudModel abstractions</summary>
 
 ### Definition
 ``` csharp
-interface IModel<TId> : IModel
+interface ICrudModel<TId> : IModel
     where TId : IEquatable<TId>
 {
     TId Id { get; }
 }
 
-abstract class Model<TId> : Model, IModel<TId>
+abstract class CrudModel<TId> : Model, ICrudModel<TId>
     where TId : IEquatable<TId>
 {
     public virtual TId Id { get; set; }
@@ -136,25 +135,24 @@ abstract class Model<TId> : Model, IModel<TId>
 
 ### Service
 ``` csharp
-interface IQueryService<TModel, TId> : IQueryService<TModel>
-    where TModel : IModel<TId>
+interface IQueryCrudService<TModel, TId> : IQueryService<TModel>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
     Task<TModel> GetByIdAsync(TId id, CancellationToken cancellation);
     Task<bool> ExistsAsync(TId id, CancellationToken cancellation);
 }
 
-interface ICommandService<TModel, TId>
-    where TModel : IModel<TId>
+interface ICommandCrudService<TModel, TId> : ICommandService<TModel>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
-    Task<TModel> CreateAsync(TModel model, CancellationToken cancellation);
     Task UpdateAsync(TId id, TModel model, CancellationToken cancellation);
     Task DeleteAsync(TId id, CancellationToken cancellation);
 }
 
-interface ICrudService<TModel, TId> : IQueryService<TModel, TId>, ICommandService<TModel, TId>
-    where TModel : IModel<TId>
+interface ICrudService<TModel, TId> : IService<TModel>, IQueryCrudService<TModel, TId>, ICommandCrudService<TModel, TId>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
 }
@@ -162,26 +160,151 @@ interface ICrudService<TModel, TId> : IQueryService<TModel, TId>, ICommandServic
 
 ### Repository
 ``` csharp
-interface IQueryRepository<TModel, TId> : IQueryRepository<TModel>
-    where TModel : IModel<TId>
+interface IQueryCrudRepository<TModel, TId> : IQueryRepository<TModel>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
     Task<TModel> GetByIdAsync(TId id, CancellationToken cancellation);
     Task<bool> ExistsAsync(TId id, CancellationToken cancellation);
 }
 
-interface ICommandRepository<TModel, TId> : ICommandRepository<TModel>
-    where TModel : IModel<TId>
+interface ICommandCrudRepository<TModel, TId> : ICommandRepository<TModel>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
 {
-    Task<TModel> CreateAsync(TModel model, CancellationToken cancellation);
     Task UpdateAsync(TId id, TModel model, CancellationToken cancellation);
     Task DeleteAsync(TId id, CancellationToken cancellation);
 }
 
-interface ICrudRepository<TModel, TId> : IQueryRepository<TModel, TId>, ICommandRepository<TModel, TId>
-    where TModel : IModel<TId>
+interface ICrudRepository<TModel, TId> : IRepository<TModel>, IQueryCrudRepository<TModel, TId>, ICommandCrudRepository<TModel, TId>
+    where TModel : ICrudModel<TId>
     where TId : IEquatable<TId>
+{
+}
+```
+
+</details>
+
+## IAceModel
+
+Introducing the **IAceModel\<TId\>** type
+
+``` csharp
+interface IAceModel<TId> : IAceModel<TId, TId>
+    where TId : IEquatable<TId>
+{
+}
+
+interface IAceModel<TId, TTraceId> : ICrudModel<TId>, IAddTraceable<TTraceId>, IEditTraceable<TTraceId>, IRemoveTraceable<TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+{
+}
+```
+
+At *Service* and *Repository* layer, the previous actions are extended and the following extra actions can be performed:
+  * Queries
+    * Get(request)
+    * Count(filter)
+    * Exists(filter)
+  * Commands
+    * ImportCsv(request)
+    * ImportExcel(request)
+
+<details>
+  <summary>IAceModel abstractions</summary>
+
+### Definition
+``` csharp
+interface IAceModel<TId, TTraceId> : ICrudModel<TId>, IAddTraceable<TTraceId>, IEditTraceable<TTraceId>, IRemoveTraceable<TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+{
+}
+
+abstract class AceModel<TId, TTraceId> : CrudModel<TId>, IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+{
+    public virtual DateTimeOffset? CreatedAt { get; set; }
+    public virtual TTraceId? CreatedBy { get; set; }
+
+    public virtual DateTimeOffset? UpdatedAt { get; set; }
+    public virtual TTraceId? UpdatedBy { get; set; }
+
+    public virtual bool IsDeleted { get; set; }
+    public virtual DateTimeOffset? DeletedAt { get; set; }
+    public virtual TTraceId? DeletedBy { get; set; }
+}
+```
+
+### Service
+``` csharp
+interface IQueryAceService<TModel, TId, TTraceId, TModelRoot, TFiltering> : IQueryCrudService<TModel, TId>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TModelRoot : ICrudModel<TId>
+    where TFiltering : IFilteringRequest
+{
+    Task<QueryResponse<TModelRoot>> GetAsync(QueryRequest<TFiltering> request, CancellationToken cancellation);
+    Task<int> CountAsync(TFiltering filter, CancellationToken cancellation);
+    Task<bool> ExistsAsync(TFiltering filter, CancellationToken cancellation);
+}
+
+interface ICommandAceService<TModel, TId, TTraceId, TExchange> : ICommandCrudService<TModel, TId>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TExchange : ICsvMappable, IExcelMappable
+{
+    Task<ImportResponse> ImportCsvAsync(ImportRequest request, CancellationToken cancellation);
+    Task<ImportResponse> ImportExcelAsync(ImportRequest request, CancellationToken cancellation);
+}
+
+interface IAceService<TModel, TId, TTraceId, TModelRoot, TFiltering, TExchange>
+    : ICrudService<TModel, TId>, IQueryAceService<TModel, TId, TTraceId, TModelRoot, TFiltering>, ICommandAceService<TModel, TId, TTraceId, TExchange>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TModelRoot : ICrudModel<TId>
+    where TFiltering : IFilteringRequest
+    where TExchange : ICsvMappable, IExcelMappable
+{
+}
+```
+
+### Repository
+``` csharp
+interface IQueryAceRepository<TModel, TId, TTraceId, TModelRoot, TFiltering> : IQueryCrudRepository<TModel, TId>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TModelRoot : ICrudModel<TId>
+    where TFiltering : IFilteringRequest
+{
+    Task<QueryResponse<TModelRoot>> GetAsync(QueryRequest<TFiltering> request, CancellationToken cancellation);
+    Task<int> CountAsync(TFiltering filter, CancellationToken cancellation);
+    Task<bool> ExistsAsync(TFiltering filter, CancellationToken cancellation);
+}
+
+interface ICommandAceRepository<TModel, TId, TTraceId, TExchange> : ICommandCrudRepository<TModel, TId>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TExchange : ICsvMappable, IExcelMappable
+{
+    Task<ImportResponse> ImportAsync(ICollection<TExchange> records, CancellationToken cancellation);
+}
+
+interface IAceRepository<TModel, TId, TTraceId, TModelRoot, TFiltering, TExchange>
+    : ICrudRepository<TModel, TId>, IQueryAceRepository<TModel, TId, TTraceId, TModelRoot, TFiltering>, ICommandAceRepository<TModel, TId, TTraceId, TExchange>
+    where TModel : IAceModel<TId, TTraceId>
+    where TId : IEquatable<TId>
+    where TTraceId : IEquatable<TTraceId>
+    where TModelRoot : ICrudModel<TId>
+    where TFiltering : IFilteringRequest
+    where TExchange : ICsvMappable, IExcelMappable
 {
 }
 ```
